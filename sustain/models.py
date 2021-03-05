@@ -7,7 +7,7 @@ from django.utils import timezone
 class account(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
     taxid = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
@@ -19,7 +19,7 @@ class account(models.Model):
 class accountbusinesstype(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     name = models.CharField(max_length=200) #default auf businestypename
     accountfrom = models.ForeignKey('sustain.account',on_delete=models.CASCADE, related_name='businesstypesfrom')
     accountto = models.ForeignKey('sustain.account',on_delete=models.CASCADE, related_name='businesstypesto')
@@ -31,7 +31,7 @@ class accountbusinesstype(models.Model):
 class businesstype(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
     
     def __str__(self):
@@ -40,7 +40,7 @@ class businesstype(models.Model):
 class report(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
     description = models.TextField()
     account =  models.ForeignKey('sustain.account',on_delete=models.CASCADE, related_name='reports') #standard vom ersteller oder so
@@ -52,7 +52,7 @@ class report(models.Model):
 class reporttype(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
 
     def __str__(self):
@@ -61,7 +61,7 @@ class reporttype(models.Model):
 class participant(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
     description = models.TextField()
     report = models.ForeignKey('sustain.report',on_delete=models.CASCADE, related_name='participants')
@@ -74,7 +74,7 @@ class participant(models.Model):
 class article(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
     description = models.TextField()
     report = models.ForeignKey('sustain.report',on_delete=models.CASCADE, related_name='articles')
@@ -82,13 +82,13 @@ class article(models.Model):
 class commentsintern(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     description = models.TextField()
     article = models.ForeignKey('sustain.article',on_delete=models.CASCADE, related_name='internalcomments')
 
 class commentsextern(models.Model):
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     createdby_unauth = models.CharField(max_length=200)
     description = models.TextField()
     article = models.ForeignKey('sustain.article',on_delete=models.CASCADE, related_name='externalcomments')
@@ -96,7 +96,7 @@ class commentsextern(models.Model):
 class commentreview(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
-    inactivce = models.BooleanField(default=False)
+    inactive = models.BooleanField(default=False)
     RATING_CHOICES = (
         ('P','Positiv'),
         ('N','Negativ'),

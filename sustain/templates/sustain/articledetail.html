@@ -1,0 +1,83 @@
+{% extends 'sustain/base.html' %}
+
+{% block content %}    
+    <div class="article">
+        <a style="float:right;padding-top:5px;" href="/accountdetail/{{article.report.account.pk}}">
+            <img src="/media/{{ article.report.account.logo }}" alt ="Smiley face" height="50" width="auto"> 
+        </a>
+        <h2>{{ article.name }}</h2>
+        <p>{{ article.description|linebreaksbr }}</p>
+        <hr>
+        <p>Zugehöriger Bericht: <a href=""> {{ article.report|linebreaksbr }}</a></p>
+        <p>Berichtstyp: {{article.report.reporttype|linebreaksbr}}</p>
+        <p>Erstellt von: <a href="/accountdetail/{{article.report.account.pk}}">{{ article.report.account.name|linebreaksbr }}</a></p>
+        <hr>
+        <h3>Teilnehmende Unternehmen</h3>
+        <table style="width: 100%;">
+            <tr> 
+                <th style="width:15%">Unternehmen</th>
+                <th style="width:20%">Funktion</th>
+                <th style="width:50%">Beschreibung</th>
+                <th style="width:15%">Status</th>
+            </tr>
+            {% for participant in article.report.participants.all %}
+                <div class="content">
+                    <tr>
+                        <td><strong><a href="/accountdetail/{{participant.account.pk}}">{{ participant.account }}</a></strong></td>
+                        <td>{{ participant.name }}</td>
+                        <td>{{ participant.description|linebreaks }}</td>
+                        <td>
+                            {% if participant.approved %}
+                                Bestätigt
+                            {% else %}
+                                Unbestätigt
+                            {% endif %}
+                        </td>
+                    </tr>
+                </div>
+            {% empty %} 
+                <p>Keine Teilnehmer gepflegt.</p>
+            {% endfor %}
+            </table>
+            <br>
+        <h3>Interne Kommentare</h3>
+        <table style="width: 100%;">
+            <tr> 
+                <th style="width:15%">Author</th>
+                <th style="width:70%">Beschreibung</th>
+                <th style="width:15%">Bewertung</th>
+            </tr>
+            {% for commentsintern in article.internalcomments.all %}
+                <div class="content">
+                    <tr>
+                        <td><strong>{{ commentsintern.createdby }}</strong></td>
+                        <td>{{ commentsintern.description|linebreaks }}</td>
+                        <td><p> + {{count_ratingposint}}</p><p> - {{ count_ratingnegint }}</p></td>
+                    </tr>
+                </div>
+            {% empty %} 
+                <p>Bisher keine internen Kommentare veröffentlicht.</p>
+            {% endfor %}
+            </table>
+            <br>
+            <h3>Externe Kommentare</h3>
+            <table style="width: 100%;">
+            <tr> 
+                <th style="width:15%">Author</th>
+                <th style="width:70%">Beschreibung</th>
+                <th style="width:15%">Bewertung</th>
+            </tr>
+            {% for commentsextern in article.externalcomments.all %}
+                <div class="content">
+                    <tr>
+                        <td><strong>{{ commentsextern.createdby_unauth }}</strong></td>
+                        <td>{{ commentsextern.description|linebreaks }}</td>
+                        <td><p> + {{ count_ratingposext }} </p><p> - {{ count_ratingnegext }} </p></td>
+                    </tr>
+                </div>
+            {% empty %}
+                <p>Bisher keine externen Kommentare veröffentlicht.</p>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

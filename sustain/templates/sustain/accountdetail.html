@@ -1,0 +1,22 @@
+{% extends 'sustain/base.html' %}
+
+{% block content %}
+        <div class="article">
+            <a style="float:right;padding:5px;" href="/accountdetail/{{account.pk}}">
+                <img src="/media/{{ account.logo }}" alt ="Smiley face" height="50" width="auto">
+            </a>   
+            <h2>{{ account.name }}</h2>
+            <p>{{ account.description|linebreaksbr }}</p>
+            <hr>
+            {% for report in account.reports.all %}
+                <div class="article">
+                    <strong>{{ report.name }}</strong>
+                    <p>{{ report.description|linebreaks }}</p>
+                    <p>{{ report.reporttype|linebreaks }}</p>
+                    <hr>
+                </div>
+            {% empty %}
+                <p>Bisher keine Berichte veröffentlicht.</p>
+            {% endfor %}
+        </div>
+{% endblock %}

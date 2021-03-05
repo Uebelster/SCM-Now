@@ -2,19 +2,21 @@
 
 {% block content %}
     {% for article in articles %}
-        <a target="_blank" href="media/{{ article.report.account.logo }}">
-            <img src="media/{{ article.report.account.logo }}" alt ="Smiley face" height="50" width="auto">
-        </a>        
+        
+              
         <div class="article">
-            <h2><a href="">{{ article.name }}</a></h2>
+            <a style="float:right;padding-top:5px;" href="/accountdetail/{{article.report.account.pk}}">
+                <img src="media/{{ article.report.account.logo }}" alt ="Smiley face" height="50" width="auto">
+            </a>  
+            <h2><a href="/articledetail/{{article.pk}}">{{ article.name }}</a></h2>
             <div class="date">
                 {{ article.createdon }}
             </div><br>
             <p>{{ article.description|linebreaksbr }}</p>
             <hr>
-            <p>Zugehöriger SCM-Bericht: <a href=""> {{ article.report|linebreaksbr }}</a></p>
+            <p>Zugehöriger Bericht: <a href=""> {{ article.report|linebreaksbr }}</a></p>
             <p>Berichtstyp: {{article.report.reporttype|linebreaksbr}}</p>
-            <p>Erstellt von: {{ article.report.account.name|linebreaksbr }}</p>
+            <p>Erstellt von: <a href="/accountdetail/{{article.report.account.pk}}">{{ article.report.account.name|linebreaksbr }}</a></p>
         </div>
     {% endfor %}
 {% endblock %}

@@ -1,7 +1,11 @@
+* {
+    font-family:Arial;
+}
+
 .page-header {
     background-color:  #003008;
     margin-top: 0;
-    padding: 20px 20px 20px 60px;
+    
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
@@ -12,10 +16,6 @@
 
 .content {
     margin-left: 40px;
-}
-
-h1, h2, h3, h4 {
-    font-family: 'Arial', cursive;
 }
 
 .date {
@@ -38,9 +38,72 @@ h1, h2, h3, h4 {
 }
 
 .article {
-    margin-bottom: 70px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding-inline: 25px;
+    border: black;
+    border-style: solid;
 }
 
 .article h2 a, .article h2 a:visited {
     color: #000000;
 }
+
+.account {
+    margin-left: 40px;
+}
+
+.report {
+    margin: 20px 0px 20px 20px;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+  
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    overflow: hidden;
+    background-color: #003008;
+    width: 100%;
+    position: fixed;
+    top: 0;
+  }
+  
+li {
+    float: left;
+  }
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    padding: 40px;
+  }
+  
+li a:hover:not(.active) {
+    background-color:#054b11;
+    color: white;
+    font-size: 18;
+  }
+  
+.active {
+    background-color: #4CAF50;
+  }
+.ribboncontent {
+    color: white;
+  }

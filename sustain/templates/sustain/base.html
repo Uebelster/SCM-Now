@@ -5,15 +5,25 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/sustain.css' %}">
     </head>
     <body>
-        <div class="page-header">
-            <h1><a href="/">Sustainability, Transparency, Collaboration</a></h1>
-        </div>
+        <ul>
+            <li class="ribboncontent" style="padding:20px;text-align:center;float: left;font-weight: bold;font-size: 20;">Sustainability, Transparency,<br> Collaboration</li>
+            <li><a href="/">Artikel</a></li>
+            <li><a href="/account_list">Unternehmen</a></li>
+            <li><a href="/about">Über SCM-Now</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="/mywork/{{user.pk}}">Mein Bereich</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+        </ul>
         <div class="content container">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-8" style="margin-top: 90px;">
                 {% block content %}
                 {% endblock %}
                 </div>
