@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db import models
+from django.db import migrations, models
 from django.utils import timezone
 
 # Create your models here.
@@ -11,6 +11,7 @@ class account(models.Model):
     name = models.CharField(max_length=200)
     taxid = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
+    logo = models.ImageField(upload_to ='uploads/', blank=True, null=True)
 
     def __str__(self):
         return self.name
