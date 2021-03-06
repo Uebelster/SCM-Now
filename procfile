@@ -1,1 +1,1 @@
-web: gunicorn scmnow.wsgi --log-file -
+web: gunicorn scmnow.wsgi.py --log-file -
