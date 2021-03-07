@@ -41,20 +41,12 @@
     margin-bottom: 20px;
     margin-top: 20px;
     padding-inline: 25px;
-    border: black;
-    border-style: solid;
+    border: rgba(255, 0, 0, 0.103);
+    border-style:dotted;
 }
 
 .article h2 a, .article h2 a:visited {
     color: #000000;
-}
-
-.account {
-    margin-left: 40px;
-}
-
-.report {
-    margin: 20px 0px 20px 20px;
 }
 
 table {
@@ -64,7 +56,7 @@ table {
 }
   
 td, th {
-    border: 1px solid #dddddd;
+    border: 1px solid #ff0000;
     text-align: left;
     padding: 8px;
 }
@@ -107,3 +99,7 @@ li a:hover:not(.active) {
 .ribboncontent {
     color: white;
   }
+
+.report {
+    padding: 5px;
+}

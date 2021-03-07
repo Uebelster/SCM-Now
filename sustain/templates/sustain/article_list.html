@@ -14,8 +14,8 @@
             </div><br>
             <p>{{ article.description|linebreaksbr }}</p>
             <hr>
-            <p>Zugehöriger Bericht: <a href=""> {{ article.report|linebreaksbr }}</a></p>
-            <p>Berichtstyp: {{article.report.reporttype|linebreaksbr}}</p>
+            <p>Zugehöriger Bericht:<a href="/reportdetail/{{article.report.pk}}"> {{ article.report|linebreaksbr }}</a></p>
+            <p>Berichtstyp:{{article.report.reporttype|linebreaksbr}}</p>
             <p>Erstellt von: <a href="/accountdetail/{{article.report.account.pk}}">{{ article.report.account.name|linebreaksbr }}</a></p>
         </div>
     {% endfor %}

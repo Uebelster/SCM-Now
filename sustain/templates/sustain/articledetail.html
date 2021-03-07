@@ -1,5 +1,5 @@
 {% extends 'sustain/base.html' %}
-
+{% load sustaintags %}
 {% block content %}    
     <div class="article">
         <a style="float:right;padding-top:5px;" href="/accountdetail/{{article.report.account.pk}}">
@@ -8,7 +8,7 @@
         <h2>{{ article.name }}</h2>
         <p>{{ article.description|linebreaksbr }}</p>
         <hr>
-        <p>Zugehöriger Bericht: <a href=""> {{ article.report|linebreaksbr }}</a></p>
+        <p>Zugehöriger Bericht: <a href="/reportdetail/{{article.report.pk}}"> {{ article.report|linebreaksbr }}</a></p>
         <p>Berichtstyp: {{article.report.reporttype|linebreaksbr}}</p>
         <p>Erstellt von: <a href="/accountdetail/{{article.report.account.pk}}">{{ article.report.account.name|linebreaksbr }}</a></p>
         <hr>
@@ -41,6 +41,15 @@
             </table>
             <br>
         <h3>Interne Kommentare</h3>
+        {% if user.is_authenticated %}
+            <a href="commentintern/new">
+                <p style="float:right">
+                    <svg  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </p> 
+            </a>
+        {% endif %}  
         <table style="width: 100%;">
             <tr> 
                 <th style="width:15%">Author</th>
@@ -52,7 +61,20 @@
                     <tr>
                         <td><strong>{{ commentsintern.createdby }}</strong></td>
                         <td>{{ commentsintern.description|linebreaks }}</td>
-                        <td><p> + {{count_ratingposint}}</p><p> - {{ count_ratingnegint }}</p></td>
+                        <td style="text-align: center;">
+                            {% if user.is_authenticated %}
+                                <p><a style="color:black;"href="/commentintern/{{commentsintern.pk}}/up"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                </svg></a></p> 
+                            {% endif %}                       
+                            <p>{% countpositive commentsintern.pk "Intern" as countpos1 %} {{countpos1}}</p>
+                            <p>{% countnegative commentsintern.pk "Intern" as countneg1 %} {{countneg1}}</p>
+                            {% if user.is_authenticated %}
+                                <p><a style="color:black;"href="/commentintern/{{commentsintern.pk}}/down"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                </svg></a></p>
+                            {% endif %}    
+                        </td>
                     </tr>
                 </div>
             {% empty %} 
@@ -61,6 +83,15 @@
             </table>
             <br>
             <h3>Externe Kommentare</h3>
+            {% if user.is_authenticated %}
+                <a href="commentextern/new"> 
+                    <p style="float:right">
+                        <svg  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </p>
+                </a>
+            {% endif %}   
             <table style="width: 100%;">
             <tr> 
                 <th style="width:15%">Author</th>
@@ -72,7 +103,20 @@
                     <tr>
                         <td><strong>{{ commentsextern.createdby_unauth }}</strong></td>
                         <td>{{ commentsextern.description|linebreaks }}</td>
-                        <td><p> + {{ count_ratingposext }} </p><p> - {{ count_ratingnegext }} </p></td>
+                        <td style="text-align: center;">
+                            {% if user.is_authenticated %}
+                                <p><a style="color:black;"href="/commentextern/{{commentsextern.pk}}/up"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                </svg></a></p>
+                            {% endif %}    
+                            <p>{% countpositive commentsextern.pk "Extern" as countpos2 %} {{countpos2}}</p>
+                            <p>{% countnegative commentsextern.pk "Extern" as countneg2 %} {{countneg2}}</p>
+                            {% if user.is_authenticated %}
+                                <p><a style="color:black;"href="/commentextern/{{commentsextern.pk}}/down"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                </svg></a></p>
+                            {% endif %}    
+                        </td>
                     </tr>
                 </div>
             {% empty %}

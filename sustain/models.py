@@ -79,6 +79,9 @@ class article(models.Model):
     description = models.TextField()
     report = models.ForeignKey('sustain.report',on_delete=models.CASCADE, related_name='articles')
 
+    def __str__(self):
+        return self.name
+
 class commentsintern(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     createdon = models.DateTimeField(default=timezone.now)
@@ -86,12 +89,18 @@ class commentsintern(models.Model):
     description = models.TextField()
     article = models.ForeignKey('sustain.article',on_delete=models.CASCADE, related_name='internalcomments')
 
+    def __str__(self):
+        return self.name
+
 class commentsextern(models.Model):
     createdon = models.DateTimeField(default=timezone.now)
     inactive = models.BooleanField(default=False)
     createdby_unauth = models.CharField(max_length=200)
     description = models.TextField()
     article = models.ForeignKey('sustain.article',on_delete=models.CASCADE, related_name='externalcomments')
+
+    def __str__(self):
+        return self.name
 
 class commentreview(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
@@ -104,3 +113,6 @@ class commentreview(models.Model):
     positive = models.CharField(max_length=1, choices=RATING_CHOICES,blank=True, null=True)
     commentsintern = models.ForeignKey('sustain.commentsintern',on_delete=models.CASCADE, related_name='ratings',blank=True, null=True)
     commentsextern = models.ForeignKey('sustain.commentsextern',on_delete=models.CASCADE, related_name='ratings',blank=True, null=True)
+
+    def __str__(self):
+        return self.name
