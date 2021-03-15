@@ -1,0 +1,39 @@
+{% extends 'sustain/base.html' %}
+
+{% block content %}
+<h2>Meine Unternehmen:</h2>
+{% for account in accounts %}   
+    <div class="article">
+        <a style="float:right;padding-top:5px;" href="/accountdetail/{{account.pk}}">
+            <img src="/media/{{ account.logo }}" alt ="Smiley face" height="50" width="auto">
+        </a>  
+        <a style="color:black;" href="/accountdetail/{{account.pk}}"><h3>{{ account.name|linebreaksbr }}</h3></a>
+        <p>{{ account.description|linebreaksbr }}</p>
+        <br><br><br>
+    </div>
+{% endfor %}
+
+<h2>Meine Berichte:</h2>
+{% for report in reports %}   
+    <div class="article">
+        <a style="float:right;padding-top:5px;" href="/accountdetail/{{report.account.pk}}">
+            <img src="/media/{{ report.account.logo }}" alt ="Smiley face" height="50" width="auto">
+        </a>  
+        <a style="color:black;" href="/reportdetail/{{report.pk}}"><h3>{{ report.name|linebreaksbr }}</h3></a>
+        <p>{{ report.description|linebreaksbr }}</p>
+        <br><br><br>
+    </div>
+{% endfor %}
+
+<h2>Meine Artikel:</h2>
+{% for article in articles %}   
+    <div class="article">
+        <a style="float:right;padding-top:5px;" href="/accountdetail/{{article.report.account.pk}}">
+            <img src="/media/{{ article.report.account.logo }}" alt ="Smiley face" height="50" width="auto">
+        </a>  
+        <a style="color:black;" href="/articledetail/{{article.pk}}"><h3>{{ article.name|linebreaksbr }}</h3></a>
+        <p>{{ article.description|linebreaksbr }}</p>
+        <br><br><br>
+    </div>
+{% endfor %}
+{% endblock %}

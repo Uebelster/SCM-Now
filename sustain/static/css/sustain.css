@@ -2,6 +2,7 @@
     font-family:Arial;
 }
 
+
 .page-header {
     background-color:  #003008;
     margin-top: 0;
@@ -41,8 +42,8 @@
     margin-bottom: 20px;
     margin-top: 20px;
     padding-inline: 25px;
-    border: rgba(255, 0, 0, 0.103);
-    border-style:dotted;
+    border: rgba(5, 70, 5, 0.103);
+    border-style:solid;
 }
 
 .article h2 a, .article h2 a:visited {
@@ -56,7 +57,7 @@ table {
 }
   
 td, th {
-    border: 1px solid #ff0000;
+    border: 1px solid #4b4949;
     text-align: left;
     padding: 8px;
 }
@@ -102,4 +103,29 @@ li a:hover:not(.active) {
 
 .report {
     padding: 5px;
+}
+.gallery {
+  display:flex;
+  justify-content:flex-start;
+  flex-wrap:wrap;
+  }
+
+
+  .gallery > DIV {
+    margin:2px;
+    padding:25px;
+    background:rgb(247, 247, 247);
+    border:1px solid rgb(230, 230, 230);
+    font-size:24pt;
+    color:#666;
+    width: 275px;
+    height: auto;
+    margin: 5;
+  }
+
+.base {
+    margin-top: 105px;
+    margin-left: auto;
+    margin-right:auto;
+    width: 95%;
 }

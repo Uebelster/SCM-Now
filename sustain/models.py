@@ -78,6 +78,7 @@ class article(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     report = models.ForeignKey('sustain.report',on_delete=models.CASCADE, related_name='articles')
+    picture = models.ImageField(upload_to ='uploads/articles/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -90,7 +91,7 @@ class commentsintern(models.Model):
     article = models.ForeignKey('sustain.article',on_delete=models.CASCADE, related_name='internalcomments')
 
     def __str__(self):
-        return self.name
+        return self.description
 
 class commentsextern(models.Model):
     createdon = models.DateTimeField(default=timezone.now)
@@ -100,7 +101,7 @@ class commentsextern(models.Model):
     article = models.ForeignKey('sustain.article',on_delete=models.CASCADE, related_name='externalcomments')
 
     def __str__(self):
-        return self.name
+        return self.description
 
 class commentreview(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)

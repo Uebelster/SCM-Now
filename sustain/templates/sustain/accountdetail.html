@@ -8,15 +8,32 @@
             <h2>{{ account.name }}</h2>
             <p>{{ account.description|linebreaksbr }}</p>
             <hr>
-            {% for report in account.reports.all %}
-                <div class="report">
-                    <strong> <a href="/reportdetail/{{report.pk}}">{{ report.name }}</a></strong>
-                    <p>{{ report.description|linebreaks }}</p>
-                    <p>{{ report.reporttype|linebreaks }}</p>
-                    <hr>
-                </div>
-            {% empty %}
-                <p>Bisher keine Berichte veröffentlicht.</p>
-            {% endfor %}
+            {% if user.is_authenticated %}
+                {% for report in account.reports.all %}
+                    <div class="report">
+                        <strong> <a href="/reportdetail/{{report.pk}}">{{ report.name }}</a></strong>
+                        <p>{{ report.description|linebreaks }}</p>
+                        <p>{{ report.reporttype|linebreaks }}</p>
+                        <hr>
+                    </div>
+                {% empty %}
+                    <p>Bisher keine Berichte von dem Unternehmen veröffentlicht.</p>
+                {% endfor %}
+            {% else %}
+                {% for report in account.reports.all %}
+                    {% for article in report.articles.all %}    
+                        <div class="report">
+                            <strong> <a href="/articledetail/{{article.pk}}">{{ article.name }}</a></strong>
+                            <p>{{ article.description|linebreaks }}</p>
+                            <p>{{ article.report}}</p>
+                            <hr>
+                        </div>
+                    {% empty %}
+                        <p>Bisher keine Artikel von dem Unternehmen veröffentlicht.</p>
+                    {% endfor %} 
+                {% empty %}
+                    <p>Bisher keine Berichte von dem Unternehmen veröffentlicht.</p>
+                {% endfor %} 
+            {% endif %}   
         </div>
 {% endblock %}

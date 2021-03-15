@@ -1,14 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import article, account,commentsextern, commentsintern, commentreview
+from .models import article, account,commentsextern, commentsintern, commentreview,report,participant
 from django.contrib.auth.decorators import login_required
-from .forms import CreateCommentInt,CreateCommentExt
+from .forms import CreateCommentInt,CreateCommentExt,CreateAccount,CreateReport,CreateArticle,CreateParticipant
 
 # Create your views here.
 
 def article_list(request):
+    accounts = account.objects.filter(inactive=False)
     articles = article.objects.filter(inactive=False)
-    return render(request, 'sustain/article_list.html', {'articles':articles})
+    return render(request, 'sustain/article_list.html', {'articles':articles,'accounts':accounts})
 
 def account_detail(request, pk):
     accounts = get_object_or_404(account, pk=pk)
@@ -74,7 +75,6 @@ def commentintern_new(request, pk):
         form = CreateCommentInt()
     return render(request, 'sustain/commentint.html', {'form': form})
 
-@login_required
 def commentextern_new(request, pk):
     if request.method == "POST":
         form = CreateCommentExt(request.POST)
@@ -88,3 +88,79 @@ def commentextern_new(request, pk):
     else:
         form = CreateCommentExt()
     return render(request, 'sustain/commentext.html', {'form': form})
+
+@login_required
+def account_new(request):
+    if request.method == "POST":
+        form = CreateAccount(request.POST)
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.createdby = request.user
+            account.save()
+            url = "/accountdetail/" + str(account.pk)
+            return redirect(url, pk=account.pk )
+    else:
+        form = CreateAccount()
+    return render(request, 'sustain/account_new.html', {'form': form})
+
+@login_required
+def report_new(request):
+    if request.method == "POST":
+        form = CreateReport(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.createdby = request.user
+            report.save()
+            url = "/reportdetail/" + str(report.pk)
+            return redirect(url, pk=report.pk )
+    else:
+        form = CreateReport()
+    return render(request, 'sustain/report_new.html', {'form': form})
+
+@login_required
+def article_new(request):
+    if request.method == "POST":
+        form = CreateArticle(request.POST)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.createdby = request.user
+            article.save()
+            url = "/articledetail/" + str(article.pk)
+            return redirect(url, pk=article.pk )
+    else:
+        form = CreateArticle()
+    return render(request, 'sustain/article_new.html', {'form': form})
+
+@login_required
+def report_detail(request, pk):
+    reports = get_object_or_404(report,pk=pk)
+    return render(request, 'sustain/reportdetail.html', {'report':reports})
+
+def account_list(request):
+    accounts = account.objects.filter(inactive=False)
+    return render(request, 'sustain/account_list.html', {'accounts':accounts})
+
+def about(request):
+    return render(request, 'sustain/about.html', {})
+
+def mywork(request, pk):
+    accounts = account.objects.filter(inactive=False,createdby=pk)
+    reports = report.objects.filter(inactive=False,createdby=pk)
+    articles = article.objects.filter(inactive=False,createdby=pk)
+    return render(request, 'sustain/mywork.html', {'accounts':accounts,'reports':reports,'articles':articles})
+
+@login_required
+def participant_new(request, pk):
+    if request.method == "POST":
+        form = CreateParticipant(request.POST)
+        reports = get_object_or_404(report, pk=pk)
+        if form.is_valid():
+            participant = form.save(commit=False)
+            participant.createdby = request.user
+            participant.report = reports
+            participant.save()
+            url = "/reportdetail/" + str(pk)
+            return redirect(url, pk=reports.pk )
+    else:
+        form = CreateParticipant()
+    return render(request, 'sustain/participant_new.html', {'form': form})

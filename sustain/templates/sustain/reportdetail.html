@@ -1,0 +1,52 @@
+{% extends 'sustain/base.html' %}
+{% block content %}
+<div class="article">
+    <h2>{{ report.name }}</h2>
+    <p>{{ report.description|linebreaksbr }}</p><br>
+    <p>Berichtstyp: {{report.reporttype }}</p>
+    <p>Unternhemen: {{report.account}}</p>
+    <hr>
+    <h3>Teilnehmer</h3>
+    <a href="participant_new/">
+        <div style="float:right">
+            <svg  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+        </div> 
+    </a>
+    <table>
+        <tr>
+            <th>
+                Unternehmen    
+            </th>
+            <th>
+                Funktion
+            </th>
+            <th>
+                Beschreibung
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+        {% for participant in report.participants.all %}
+            <div class="content">
+                <tr>
+                    <td><strong><a href="/accountdetail/{{participant.account.pk}}">{{ participant.account }}</a></strong></td>
+                    <td>{{ participant.name }}</td>
+                    <td>{{ participant.description|linebreaks }}</td>
+                    <td>
+                        {% if participant.approved %}
+                            Bestätigt
+                        {% else %}
+                            Unbestätigt
+                        {% endif %}
+                    </td>
+                </tr>
+            </div>
+        {% empty %} 
+            <p>Keine Teilnehmer gepflegt.</p>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

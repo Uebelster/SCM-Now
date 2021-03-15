@@ -1,22 +1,31 @@
 {% extends 'sustain/base.html' %}
 
 {% block content %}
-    {% for article in articles %}
-        
-              
+   
+    {% for account in accounts%}
         <div class="article">
-            <a style="float:right;padding-top:5px;" href="/accountdetail/{{article.report.account.pk}}">
-                <img src="media/{{ article.report.account.logo }}" alt ="Smiley face" height="50" width="auto">
+            <a style="float:right;padding-top:5px;" href="/accountdetail/{{account.pk}}">
+                <img src="media/{{account.logo }}" alt ="No picture yet" height="50" width="auto">
             </a>  
-            <h2><a href="/articledetail/{{article.pk}}">{{ article.name }}</a></h2>
-            <div class="date">
-                {{ article.createdon }}
-            </div><br>
-            <p>{{ article.description|linebreaksbr }}</p>
-            <hr>
-            <p>Zugehöriger Bericht:<a href="/reportdetail/{{article.report.pk}}"> {{ article.report|linebreaksbr }}</a></p>
-            <p>Berichtstyp:{{article.report.reporttype|linebreaksbr}}</p>
-            <p>Erstellt von: <a href="/accountdetail/{{article.report.account.pk}}">{{ article.report.account.name|linebreaksbr }}</a></p>
+            <h2><a href="/accountdetail/{{account.pk}}">{{account.name}}</a></h2>
+           
+            <div class='gallery'>
+                {% for report in account.reports.all %}
+                    {% for article in report.articles.all %}
+                        <div>
+                            <a href="/articledetail/{{article.pk}}">
+                                <img src="media/{{article.picture }}" alt ="No picture yet" height="275" width="auto">
+                            </a>
+                            <h3><a style='color:black' href="/articledetail/{{article.pk}}">{{ article.name }}</a></h3>
+                        </div>
+                    {% empty %}
+                        <p> Kein Artikel vorhanden</p>
+                    {% endfor %}
+                {% empty %}
+                    <p> Kein Bericht vorhanden</p>
+                {% endfor %}
+            </div>
+
         </div>
     {% endfor %}
 {% endblock %}

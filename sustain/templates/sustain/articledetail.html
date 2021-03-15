@@ -12,7 +12,7 @@
         <p>Berichtstyp: {{article.report.reporttype|linebreaksbr}}</p>
         <p>Erstellt von: <a href="/accountdetail/{{article.report.account.pk}}">{{ article.report.account.name|linebreaksbr }}</a></p>
         <hr>
-        <h3>Teilnehmende Unternehmen</h3>
+        <!--<h3>Teilnehmende Unternehmen</h3>
         <table style="width: 100%;">
             <tr> 
                 <th style="width:15%">Unternehmen</th>
@@ -39,7 +39,8 @@
                 <p>Keine Teilnehmer gepflegt.</p>
             {% endfor %}
             </table>
-            <br>
+            <br> -->
+        {% if user.is_authenticated %}
         <h3>Interne Kommentare</h3>
         {% if user.is_authenticated %}
             <a href="commentintern/new">
@@ -49,79 +50,64 @@
                     </svg>
                 </p> 
             </a>
-        {% endif %}  
-        <table style="width: 100%;">
-            <tr> 
-                <th style="width:15%">Author</th>
-                <th style="width:70%">Beschreibung</th>
-                <th style="width:15%">Bewertung</th>
-            </tr>
-            {% for commentsintern in article.internalcomments.all %}
-                <div class="content">
-                    <tr>
-                        <td><strong>{{ commentsintern.createdby }}</strong></td>
-                        <td>{{ commentsintern.description|linebreaks }}</td>
-                        <td style="text-align: center;">
-                            {% if user.is_authenticated %}
-                                <p><a style="color:black;"href="/commentintern/{{commentsintern.pk}}/up"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                                </svg></a></p> 
-                            {% endif %}                       
-                            <p>{% countpositive commentsintern.pk "Intern" as countpos1 %} {{countpos1}}</p>
-                            <p>{% countnegative commentsintern.pk "Intern" as countneg1 %} {{countneg1}}</p>
-                            {% if user.is_authenticated %}
-                                <p><a style="color:black;"href="/commentintern/{{commentsintern.pk}}/down"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                                </svg></a></p>
-                            {% endif %}    
-                        </td>
-                    </tr>
-                </div>
-            {% empty %} 
-                <p>Bisher keine internen Kommentare veröffentlicht.</p>
-            {% endfor %}
-            </table>
+        {% endif %} 
+        <div class='Gallery'>
+                {% for commentsintern in article.internalcomments.all %}
+                    <div>
+                        <p style="font-size: 15">{{ commentsintern.description }}</p>
+                        <strong style="font-size: 15">{{ commentsintern.createdby }}</strong>
+                                {% if user.is_authenticated %}
+                                    <p><a style="color:black;"href="/commentintern/{{commentsintern.pk}}/up"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                    <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                    </svg></a></p> 
+                                {% endif %}                       
+                                <p style="font-size: 15">{% countpositive commentsintern.pk "Intern" as countpos1 %} {{countpos1}}</p>
+                                <p style="font-size: 15">{% countnegative commentsintern.pk "Intern" as countneg1 %} {{countneg1}}</p>
+                                {% if user.is_authenticated %}
+                                    <p><a style="color:black;"href="/commentintern/{{commentsintern.pk}}/down"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                    </svg></a></p>
+                                {% endif %}
+                    </div>
+                {% empty %} 
+                    <p>Bisher keine internen Kommentare veröffentlicht.</p>
+                {% endfor %}
+            </div>
             <br>
-            <h3>Externe Kommentare</h3>
-            {% if user.is_authenticated %}
-                <a href="commentextern/new"> 
-                    <p style="float:right">
-                        <svg  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                    </p>
-                </a>
-            {% endif %}   
-            <table style="width: 100%;">
-            <tr> 
-                <th style="width:15%">Author</th>
-                <th style="width:70%">Beschreibung</th>
-                <th style="width:15%">Bewertung</th>
-            </tr>
+        {% endif %}
+
+        <h3>Externe Kommentare</h3>
+        {% if user.is_authenticated %}
+        {% else %}
+            <a href="commentextern/new"> 
+                <p style="float:right">
+                    <svg  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </p>
+            </a>
+        {% endif %}
+        <div class='Gallery'>
             {% for commentsextern in article.externalcomments.all %}
-                <div class="content">
-                    <tr>
-                        <td><strong>{{ commentsextern.createdby_unauth }}</strong></td>
-                        <td>{{ commentsextern.description|linebreaks }}</td>
-                        <td style="text-align: center;">
-                            {% if user.is_authenticated %}
-                                <p><a style="color:black;"href="/commentextern/{{commentsextern.pk}}/up"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                                </svg></a></p>
-                            {% endif %}    
-                            <p>{% countpositive commentsextern.pk "Extern" as countpos2 %} {{countpos2}}</p>
-                            <p>{% countnegative commentsextern.pk "Extern" as countneg2 %} {{countneg2}}</p>
-                            {% if user.is_authenticated %}
-                                <p><a style="color:black;"href="/commentextern/{{commentsextern.pk}}/down"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                                </svg></a></p>
-                            {% endif %}    
-                        </td>
-                    </tr>
-                </div>
+                <div>
+                    <p style="font-size: 15">{{ commentsextern.description}}</p>
+                    <strong style="font-size: 15">{{ commentsextern.createdby_unauth }}</strong>
+                    {% if user.is_authenticated %}
+                        <p style="font-size: 15"><a style="color:black;"href="/commentextern/{{commentsextern.pk}}/up"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                        <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                        </svg></a></p>
+                    {% endif %}    
+                    <p style="font-size: 15">{% countpositive commentsextern.pk "Extern" as countpos2 %} {{countpos2}}</p>
+                    <p style="font-size: 15">{% countnegative commentsextern.pk "Extern" as countneg2 %} {{countneg2}}</p>
+                    {% if user.is_authenticated %}
+                        <p style="font-size: 15"><a style="color:black;"href="/commentextern/{{commentsextern.pk}}/down"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                        <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg></a></p>
+                    {% endif %} 
+        </div>
             {% empty %}
                 <p>Bisher keine externen Kommentare veröffentlicht.</p>
             {% endfor %}
-        </table>
+        </div> 
     </div>
 {% endblock %}

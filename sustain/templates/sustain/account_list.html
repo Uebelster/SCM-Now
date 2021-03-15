@@ -1,0 +1,16 @@
+{% extends 'sustain/base.html' %}
+
+{% block content %}
+    {% for account in accounts %}
+        
+              
+        <div class="article">
+            <a style="float:right;padding-top:5px;" href="/accountdetail/{{account.pk}}">
+                <img src="/media/{{ account.logo }}" alt ="Smiley face" height="50" width="auto">
+            </a>  
+            <a style="color:black;" href="/accountdetail/{{account.pk}}"><p>{{ account.name|linebreaksbr }}</p></a>
+            <p>{{ account.description|linebreaksbr }}</p>
+            <br><br><br>
+        </div>
+    {% endfor %}
+{% endblock %}

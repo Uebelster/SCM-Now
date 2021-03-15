@@ -23,17 +23,18 @@
             {% if user.is_authenticated %}
             <li><a href="/mywork/{{user.pk}}">Mein Bereich</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li style='float:right'><a href="/account_new">Neuer Account</a></li>
+            <li style='float:right'><a href="/report_new">Neuer Bericht</a></li>
+            <li style='float:right'><a href="/article_new">Neuer Artikel</a></li>
             {% else %}
             <li><a href="{% url 'login' %}">Login</a></li>
             {% endif %}
         </ul>
-        <div class="content container">
             <div class="row">
-                <div class="col-md-8" style="margin-top: 90px;">
+                <div class='base'>
                 {% block content %}
                 {% endblock %}
                 </div>
             </div>
-        </div>
     </body>
 </html>
