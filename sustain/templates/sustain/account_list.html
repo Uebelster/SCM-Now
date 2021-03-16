@@ -8,9 +8,23 @@
             <a style="float:right;padding-top:5px;" href="/accountdetail/{{account.pk}}">
                 <img src="/media/{{ account.logo }}" alt ="Smiley face" height="50" width="auto">
             </a>  
-            <a style="color:black;" href="/accountdetail/{{account.pk}}"><p>{{ account.name|linebreaksbr }}</p></a>
+            <a style="color:black;" href="/accountdetail/{{account.pk}}"><h2>{{ account.name|linebreaksbr }}</h2></a>
             <p>{{ account.description|linebreaksbr }}</p>
-            <br><br><br>
+            <hr>
+            <div class='Gallery'>
+                {% for accountbusinesstype in account.businesstypesfrom.all %}
+                    <div style='font-size: 15;'>
+                        <p><a style="float:right;padding-top:5px;" href="/accountdetail/{{accountbusinesstype.accountto.pk}}">
+                            <img src="/media/{{ accountbusinesstype.accountto.logo }}" alt ="Smiley face" height="auto" width="80">
+                        </a></p>
+                        <p>{{accountbusinesstype.accountto}}</p>
+                        <p>{{accountbusinesstype.businesstype}}</p>
+                    </div>  
+                {% empty %} 
+                    <p>Bisher keine Verknüfungen zwischen dieser Firma erstellt worden.</p>
+                {% endfor %}
+            </div>
+            <br>
         </div>
     {% endfor %}
 {% endblock %}

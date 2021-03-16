@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import article, account,commentsextern, commentsintern, commentreview,report,participant
+from .models import article, account,commentsextern, commentsintern, commentreview,report,participant,accountbusinesstype
 from django.contrib.auth.decorators import login_required
 from .forms import CreateCommentInt,CreateCommentExt,CreateAccount,CreateReport,CreateArticle,CreateParticipant
 

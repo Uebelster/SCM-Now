@@ -1,39 +1,86 @@
 {% extends 'sustain/base.html' %}
 
 {% block content %}
-        <div class="article">
+        <div class="article" style="width: 50%;float:left">
             <a style="float:right;padding:5px;" href="/accountdetail/{{account.pk}}">
                 <img src="/media/{{ account.logo }}" alt ="Smiley face" height="50" width="auto">
             </a>   
-            <h2>{{ account.name }}</h2>
+            <h2>{{ account.name }}
+                {% if user.is_authenticated %}
+                <button type="button" class="btn btn-secondary"><a style="color: black;" href="/edit/account/{{account.pk}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                    </svg></a>
+                </button>
+                {% endif %}
+            </h2>
             <p>{{ account.description|linebreaksbr }}</p>
+            <br>
             <hr>
-            {% if user.is_authenticated %}
+            <p>
+                {% if user.is_authenticated %}
+                <button type="button" class="btn btn-secondary" style="float: right;"><a style="color: black;" href="/accountbusinesstype_new">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="auto" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                    </svg></a>
+                </button>
+                {% endif %}
+            </p>
+            <div class="Gallery">
+                {% for accountbusinesstype in account.businesstypesfrom.all %}
+                    <div style="font-size: 15">
+                        <p><a style="float:right;padding-top:5px;" href="/accountdetail/{{accountbusinesstype.accountto.pk}}">
+                            <img src="/media/{{ accountbusinesstype.accountto.logo }}" alt ="Smiley face" height="auto" width="80">
+                        </a></p>
+                        <p>{{accountbusinesstype.accountto}}</p>
+                        <p>{{accountbusinesstype.businesstype}}</p>
+                        <br>
+                        {% if user.is_authenticated %}
+                        <button style="float: right;" type="button" class="btn btn-secondary"><a style="color: black;" href="/edit/accountbusinesstype/{{accountbusinesstype.pk}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                            </svg></a>
+                        </button>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    
+                {% endfor %}
+            </div>
+        </div>
+        <hr>
+        {% if user.is_authenticated %}
+            <div class='gallery'>
+                
                 {% for report in account.reports.all %}
-                    <div class="report">
+                    <div style="font-size: 15">
                         <strong> <a href="/reportdetail/{{report.pk}}">{{ report.name }}</a></strong>
                         <p>{{ report.description|linebreaks }}</p>
-                        <p>{{ report.reporttype|linebreaks }}</p>
+                        <p><strong>{{ report.reporttype|linebreaks }}</strong></p>
                         <hr>
                     </div>
                 {% empty %}
-                    <p>Bisher keine Berichte von dem Unternehmen veröffentlicht.</p>
+                    
                 {% endfor %}
-            {% else %}
+            </div>
+        {% else %}
+            <div class='gallery'>
                 {% for report in account.reports.all %}
                     {% for article in report.articles.all %}    
-                        <div class="report">
+                        <div style="font-size: 15">
+                            
+                            <a href="/articledetail/{{article.pk}}">
+                                <img src="/media/{{article.picture }}" alt ="No picture yet" height="275" width="auto">
+                            </a>
                             <strong> <a href="/articledetail/{{article.pk}}">{{ article.name }}</a></strong>
-                            <p>{{ article.description|linebreaks }}</p>
-                            <p>{{ article.report}}</p>
                             <hr>
                         </div>
                     {% empty %}
-                        <p>Bisher keine Artikel von dem Unternehmen veröffentlicht.</p>
+                        
                     {% endfor %} 
                 {% empty %}
-                    <p>Bisher keine Berichte von dem Unternehmen veröffentlicht.</p>
+                    
                 {% endfor %} 
-            {% endif %}   
-        </div>
+            </div>
+        {% endif %}   
 {% endblock %}
