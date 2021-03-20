@@ -1,9 +1,9 @@
 {% extends 'sustain/base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
     <h2>Neues Unternehmen</h2>
-    <form method="POST" class="CreateAccount" enctype="multipart/form-data">{% csrf_token %}
-        {{ form.as_p }}
+    <form method="POST" class="Form" enctype="multipart/form-data">{% csrf_token %}
+        {{ form|crispy }}
         <button type="submit" class="save btn btn-default">Speichern</button>
     </form>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends 'sustain/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h2>Neuer Kommentar</h2>
-    <form method="POST" class="Form">{% csrf_token %}
+    <h2>Teilnehmendes Unternehmen bearbeiten</h2>
+    <form method="POST" class="Form" enctype="multipart/form-data">{% csrf_token %}
         {{ form|crispy }}
         <button type="submit" class="save btn btn-default">Speichern</button>
     </form>

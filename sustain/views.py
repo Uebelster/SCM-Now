@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import article, account,commentsextern, commentsintern, commentreview,report,participant,accountbusinesstype
 from django.contrib.auth.decorators import login_required
-from .forms import CreateCommentInt,CreateCommentExt,CreateAccount,CreateReport,CreateArticle,CreateParticipant
+from .forms import CommentInt,CommentExt,Account,Report,Article,Participant,AccountBusinessTypes,AccountReport
 
 # Create your views here.
 
@@ -13,7 +13,8 @@ def article_list(request):
 
 def account_detail(request, pk):
     accounts = get_object_or_404(account, pk=pk)
-    return render(request, 'sustain/accountdetail.html', {'account':accounts})
+    butypes = accountbusinesstype.objects.filter(accountfrom=pk,inactive=False)
+    return render(request, 'sustain/accountdetail.html', {'account':accounts,'butypes':butypes})
 
 def article_detail(request, pk):
     articles = get_object_or_404(article, pk=pk)
@@ -62,7 +63,7 @@ def commentsextern_down(request, pk):
 @login_required
 def commentintern_new(request, pk):
     if request.method == "POST":
-        form = CreateCommentInt(request.POST)
+        form = CommentInt(request.POST)
         articles = get_object_or_404(article, pk=pk)
         if form.is_valid():
             commentsintern = form.save(commit=False)
@@ -72,12 +73,12 @@ def commentintern_new(request, pk):
             url = "/articledetail/" + str(pk)
             return redirect(url, pk=commentsintern.article.pk )
     else:
-        form = CreateCommentInt()
+        form = CommentInt()
     return render(request, 'sustain/commentint.html', {'form': form})
 
 def commentextern_new(request, pk):
     if request.method == "POST":
-        form = CreateCommentExt(request.POST)
+        form = CommentExt(request.POST)
         articles = get_object_or_404(article, pk=pk)
         if form.is_valid():
             commentsextern = form.save(commit=False)
@@ -86,13 +87,13 @@ def commentextern_new(request, pk):
             url = "/articledetail/" + str(pk)
             return redirect(url, pk=commentsextern.article.pk )
     else:
-        form = CreateCommentExt()
+        form = CommentExt()
     return render(request, 'sustain/commentext.html', {'form': form})
 
 @login_required
 def account_new(request):
     if request.method == "POST":
-        form = CreateAccount(request.POST)
+        form = Account(request.POST, request.FILES)
         if form.is_valid():
             account = form.save(commit=False)
             account.createdby = request.user
@@ -100,13 +101,13 @@ def account_new(request):
             url = "/accountdetail/" + str(account.pk)
             return redirect(url, pk=account.pk )
     else:
-        form = CreateAccount()
+        form = Account()
     return render(request, 'sustain/account_new.html', {'form': form})
 
 @login_required
 def report_new(request):
     if request.method == "POST":
-        form = CreateReport(request.POST)
+        form = Report(request.POST)
         if form.is_valid():
             report = form.save(commit=False)
             report.createdby = request.user
@@ -114,13 +115,13 @@ def report_new(request):
             url = "/reportdetail/" + str(report.pk)
             return redirect(url, pk=report.pk )
     else:
-        form = CreateReport()
+        form = Report()
     return render(request, 'sustain/report_new.html', {'form': form})
 
 @login_required
 def article_new(request):
     if request.method == "POST":
-        form = CreateArticle(request.POST)
+        form = Article(request.POST, request.FILES)
         if form.is_valid():
             article = form.save(commit=False)
             article.createdby = request.user
@@ -128,7 +129,7 @@ def article_new(request):
             url = "/articledetail/" + str(article.pk)
             return redirect(url, pk=article.pk )
     else:
-        form = CreateArticle()
+        form = Article()
     return render(request, 'sustain/article_new.html', {'form': form})
 
 @login_required
@@ -138,7 +139,8 @@ def report_detail(request, pk):
 
 def account_list(request):
     accounts = account.objects.filter(inactive=False)
-    return render(request, 'sustain/account_list.html', {'accounts':accounts})
+    butypes = accountbusinesstype.objects.filter(inactive=False)
+    return render(request, 'sustain/account_list.html', {'accounts':accounts,'butypes':butypes})
 
 def about(request):
     return render(request, 'sustain/about.html', {})
@@ -152,7 +154,7 @@ def mywork(request, pk):
 @login_required
 def participant_new(request, pk):
     if request.method == "POST":
-        form = CreateParticipant(request.POST)
+        form = Participant(request.POST)
         reports = get_object_or_404(report, pk=pk)
         if form.is_valid():
             participant = form.save(commit=False)
@@ -162,5 +164,109 @@ def participant_new(request, pk):
             url = "/reportdetail/" + str(pk)
             return redirect(url, pk=reports.pk )
     else:
-        form = CreateParticipant()
+        form = Participant()
     return render(request, 'sustain/participant_new.html', {'form': form})
+
+@login_required
+def account_edit(request, pk):
+    accounts = get_object_or_404(account, pk=pk)
+    if request.method == "POST":
+        form = Account(request.POST, request.FILES, instance=accounts)
+        if form.is_valid():
+            accounts = form.save(commit=False)
+            accounts.save()
+            url = "/accountdetail/" + str(accounts.pk)
+            return redirect(url, pk=accounts.pk )
+    else:
+        form = Account(instance=accounts)
+    return render(request, 'sustain/account_edit.html', {'form': form})
+
+
+@login_required
+def accountbusinesstype_edit(request, pk):
+    butypes = get_object_or_404(accountbusinesstype, pk=pk)
+    if request.method == "POST":
+        form = AccountBusinessTypes(request.POST, instance=butypes)
+        if form.is_valid():
+            butypes = form.save(commit=False)
+            butypes.name = butypes.businesstype.name
+            butypes.save()
+            url = "/accountdetail/" + str(butypes.accountfrom.pk)
+            return redirect(url, pk=butypes.accountfrom.pk )
+    else:
+        form = AccountBusinessTypes(instance=butypes)
+    return render(request, 'sustain/accountbusinesstypes_edit.html', {'form': form})
+
+@login_required
+def accountbusinesstype_new(request, pk):
+    if request.method == "POST":
+        form = AccountBusinessTypes(request.POST)
+        if form.is_valid():
+            accounts = get_object_or_404(account, pk=pk)
+            accountbusinesstype = form.save(commit=False)
+            accountbusinesstype.createdby = request.user
+            accountbusinesstype.accountfrom = accounts
+            accountbusinesstype.save()
+            url = "/accountdetail/" + str(accountbusinesstype.accountfrom.pk)
+            return redirect(url, pk=accountbusinesstype.accountfrom.pk)
+    else:
+        form = AccountBusinessTypes()
+    return render(request, 'sustain/accountbusinesstype_new.html', {'form': form})
+
+@login_required
+def account_report_new(request, pk):
+    if request.method == "POST":
+        form = AccountReport(request.POST)
+        if form.is_valid():
+            accounts = get_object_or_404(account, pk=pk)
+            report = form.save(commit=False)
+            report.createdby = request.user
+            report.account = accounts
+            report.save()
+            url = "/reportdetail/" + str(report.pk)
+            return redirect(url, pk=report.account.pk)
+    else:
+        form = AccountReport()
+    return render(request, 'sustain/accountreport_new.html', {'form': form})
+
+@login_required
+def participant_edit(request, pk):
+    participants = get_object_or_404(participant, pk=pk)
+    if request.method == "POST":
+        form = Participant(request.POST, instance=participants)
+        if form.is_valid():
+            participants = form.save(commit=False)
+            participants.save()
+            url = "/reportdetail/" + str(participants.report.pk)
+            return redirect(url, pk=participants.report.pk )
+    else:
+        form = Participant(instance=participants)
+    return render(request, 'sustain/participant_edit.html', {'form': form})
+
+@login_required
+def report_edit(request, pk):
+    reports = get_object_or_404(report, pk=pk)
+    if request.method == "POST":
+        form = Report(request.POST, instance=reports)
+        if form.is_valid():
+            reports = form.save(commit=False)
+            reports.save()
+            url = "/reportdetail/" + str(reports.pk)
+            return redirect(url, pk=reports.pk )
+    else:
+        form = Report(instance=reports)
+    return render(request, 'sustain/report_edit.html', {'form': form})
+
+@login_required
+def article_edit(request, pk):
+    articles = get_object_or_404(article, pk=pk)
+    if request.method == "POST":
+        form = Article(request.POST,request.FILES, instance=articles)
+        if form.is_valid():
+            articles = form.save(commit=False)
+            articles.save()
+            url = "/articledetail/" + str(articles.pk)
+            return redirect(url, pk=articles.pk )
+    else:
+        form = Article(instance=articles)
+    return render(request, 'sustain/article_edit.html', {'form': form})
